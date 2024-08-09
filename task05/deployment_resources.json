@@ -1,0 +1,81 @@
+{
+  "lambda-basic-execution": {
+    "policy_content": {
+      "Statement": [
+        {
+          "Action": [
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents",
+            "dynamodb:GetItem",
+            "dynamodb:Query",
+            "dynamodb:PutItem",
+            "dynamodb:Batch*",
+            "dynamodb:DeleteItem",
+            "ssm:PutParameter",
+            "ssm:GetParameter",
+            "kms:Decrypt"
+          ],
+          "Effect": "Allow",
+          "Resource": "*"
+        }
+      ],
+      "Version": "2012-10-17"
+    },
+    "resource_type": "iam_policy"
+  },
+  "task5_api": {
+    "resource_type": "api_gateway",
+    "deploy_stage": "api",
+    "dependencies": [],
+    "resources": {
+      "/events": {
+        "enable_cors": false,
+        "POST": {
+          "authorization_type": "NONE",
+          "integration_type": "mock",
+          "api_key_required": false,
+          "method_request_parameters": {},
+          "integration_request_body_template": {},
+          "responses": [],
+          "integration_responses": [],
+          "default_error_pattern": true
+        }
+      }
+    },
+    "minimum_compression_size": 0
+  },
+  "Events": {
+    "resource_type": "dynamodb_table",
+    "hash_key_name": "Id",
+    "hash_key_type": "N",
+    "sort_key_name": "Category",
+    "sort_key_type": "S",
+    "read_capacity": 1,
+    "write_capacity": 1,
+    "global_indexes": [
+      {
+        "name": "CategoryIndex",
+        "index_key_name": "Category",
+        "index_key_type": "S",
+        "index_sort_key_name": "Score",
+        "index_sort_key_type": "N"
+      }
+    ],
+    "autoscaling": [
+      {
+        "resource_name": "Events",
+        "role_name": "AWSServiceRoleForApplicationAutoScaling_DynamoDBTable",
+        "min_capacity": 1,
+        "max_capacity": 10,
+        "config": {
+          "policy_name": "EventsScalingPolicy",
+          "target_utilization": 70,
+          "scale_in_cooldown": 60,
+          "scale_out_cooldown": 60
+        },
+        "dimension": "dynamodb:table:ReadCapacityUnits"
+      }
+    ]
+  }
+}
