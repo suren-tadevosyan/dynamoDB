@@ -15,6 +15,5 @@
   },
   "publish_version": false,
   "url_config": {},
-  "alias": "${lambdas_alias_name}",
   "ephemeral_storage": 512
 }
