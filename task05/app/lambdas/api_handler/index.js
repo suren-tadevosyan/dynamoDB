@@ -4,25 +4,35 @@ const { v4: uuidv4 } = require("uuid");
 
 exports.handler = async (event) => {
   try {
+    // Parse the incoming event body from API Gateway
+    const requestBody = JSON.parse(event.body);
+
+    // Extract values from the request body
+    const principalId = parseInt(requestBody.principalId);
+    const content = requestBody.content || {};
+
+    // Create the item to be stored in DynamoDB
     const item = {
       id: uuidv4(),
-      principalId: parseInt(event.principalId),
+      principalId: principalId,
       createdAt: new Date().toISOString(),
-      body: event.body || {},
+      body: content,
     };
 
+    // Define the parameters for the DynamoDB put operation
     const params = {
       TableName: "Events",
       Item: item,
     };
 
+    // Store the item in DynamoDB
     await dynamoDB.put(params).promise();
 
+    // Return a successful response with the created event
     return {
       statusCode: 201,
       body: JSON.stringify({
-        message: "Resource created successfully",
-        item: item,
+        event: item, // Return the created event
       }),
       headers: {
         "Content-Type": "application/json",
