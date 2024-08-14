@@ -18,20 +18,18 @@ exports.handler = async (event) => {
 
     await dynamoDB.put(params).promise();
 
+    const correctPathResponse = JSON.stringify({
+      statusCode: 201,
+      event: item,
+    });
+
     return {
-      statusCode: 201, // Ensure statusCode is always returned
-      body: JSON.stringify({
-        message: "Resource created successfully",
-        item: item,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
+      correctPathResponse,
     };
   } catch (error) {
     console.error("Error inserting item into DynamoDB:", error);
     return {
-      statusCode: 500, 
+      statusCode: 500,
       body: JSON.stringify({ message: "Internal Server Error" }),
       headers: {
         "Content-Type": "application/json",
