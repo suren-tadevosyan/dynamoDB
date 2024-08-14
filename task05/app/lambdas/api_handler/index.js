@@ -18,13 +18,15 @@ exports.handler = async (event) => {
 
     await dynamoDB.put(params).promise();
 
-    const correctPathResponse = JSON.stringify({
-      statusCode: 201,
-      event: item,
-    });
-
+    // Properly return the response object with statusCode
     return {
-      correctPathResponse,
+      statusCode: 201,
+      body: JSON.stringify({
+        event: item,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
     };
   } catch (error) {
     console.error("Error inserting item into DynamoDB:", error);

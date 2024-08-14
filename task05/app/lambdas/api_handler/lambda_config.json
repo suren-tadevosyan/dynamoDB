@@ -10,9 +10,11 @@
   "lambda_path": "lambdas\\api_handler",
   "dependencies": [],
   "event_sources": [],
-  "env_variables": {},
+  "env_variables": {
+    "target_table": "Events"
+  },
   "publish_version": false,
   "url_config": {},
-  "ephemeral_storage": 512,
-  "target_table": "Events"
+  "alias": "${lambdas_alias_name}",
+  "ephemeral_storage": 512
 }
