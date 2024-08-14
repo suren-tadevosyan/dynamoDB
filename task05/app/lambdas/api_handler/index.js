@@ -4,29 +4,25 @@ const { v4: uuidv4 } = require("uuid");
 
 exports.handler = async (event) => {
   try {
-    // Construct the item to be inserted into DynamoDB
     const item = {
-      id: uuidv4(), // UUID v4 for unique identifier
-      principalId: parseInt(event.principalId), // Assuming principalId is passed in the event and is an integer
-      createdAt: new Date().toISOString(), // ISO 8601 formatted string
-      body: event.body || {}, // Assuming body is passed in the event as a map (JSON object)
+      id: uuidv4(),
+      principalId: parseInt(event.principalId),
+      createdAt: new Date().toISOString(),
+      body: event.body || {},
     };
 
-    // Parameters for DynamoDB put operation
     const params = {
-      TableName: "Events", // Replace with your DynamoDB table name
+      TableName: "Events",
       Item: item,
     };
 
-    // Insert item into DynamoDB
     await dynamoDB.put(params).promise();
 
-    // Return success response
     return {
       statusCode: 201,
       body: JSON.stringify({
         message: "Resource created successfully",
-        item: item, // Optionally include the item in the response
+        item: item,
       }),
       headers: {
         "Content-Type": "application/json",

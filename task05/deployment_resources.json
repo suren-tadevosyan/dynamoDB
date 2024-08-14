@@ -51,29 +51,7 @@
     "hash_key_type": "N",
     "read_capacity": 1,
     "write_capacity": 1,
-    "global_indexes": [
-      {
-        "name": "CategoryIndex",
-        "index_key_name": "Category",
-        "index_key_type": "S",
-        "index_sort_key_name": "Score",
-        "index_sort_key_type": "N"
-      }
-    ],
-    "autoscaling": [
-      {
-        "resource_name": "Events",
-        "role_name": "AWSServiceRoleForApplicationAutoScaling_DynamoDBTable",
-        "min_capacity": 1,
-        "max_capacity": 10,
-        "config": {
-          "policy_name": "EventsScalingPolicy",
-          "target_utilization": 70,
-          "scale_in_cooldown": 60,
-          "scale_out_cooldown": 60
-        },
-        "dimension": "dynamodb:table:ReadCapacityUnits"
-      }
-    ]
+    "global_indexes": [],
+    "autoscaling": []
   }
 }
