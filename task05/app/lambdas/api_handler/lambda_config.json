@@ -13,5 +13,6 @@
   "env_variables": {},
   "publish_version": false,
   "url_config": {},
-  "ephemeral_storage": 512
+  "ephemeral_storage": 512,
+  "target_table": "Events"
 }
