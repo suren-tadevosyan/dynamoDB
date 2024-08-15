@@ -1,13 +1,13 @@
-import AWS from "aws-sdk";
-import { v4 as uuidv4 } from "uuid";
-import dotenv from "dotenv";
+const AWS = require("aws-sdk");
+const { v4: uuidv4 } = require("uuid");
+const dotenv = require("dotenv");
 
 dotenv.config();
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 const tableName = process.env.target_table || "Events";
 
-export const handler = async (event) => {
+exports.handler = async (event) => {
   const eventId = uuidv4();
   const createdAt = new Date().toISOString();
 
