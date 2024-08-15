@@ -1,13 +1,10 @@
-const AWS = require("aws-sdk");
-const { v4: uuidv4 } = require("uuid");
-const dotenv = require("dotenv");
-
-dotenv.config();
+import AWS from "aws-sdk";
+import { v4 as uuidv4 } from "uuid";
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 const tableName = process.env.target_table || "Events";
 
-exports.handler = async (event) => {
+export const handler = async (event) => {
   const eventId = uuidv4();
   const createdAt = new Date().toISOString();
 
@@ -22,25 +19,23 @@ exports.handler = async (event) => {
   };
 
   try {
-    await docClient.put(params).promise();
+    const data = await docClient.put(params).promise();
 
-    return {
+    const res = {
       statusCode: 201,
-      body: JSON.stringify({
-        event: {
-          id: eventId,
-          principalId: event.principalId,
-          createdAt: createdAt,
-          body: event.content,
-        },
-      }),
+      event: {
+        id: eventId,
+        principalId: event.principalId,
+        createdAt: createdAt,
+        body: event.content,
+      },
     };
+
+    return res;
   } catch (error) {
-    return {
+    return JSON.stringify({
       statusCode: 500,
-      body: JSON.stringify({
-        message: "Could not save event to DynamoDB",
-      }),
-    };
+      message: "Could not save event to DynamoDB",
+    });
   }
 };
