@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const docClient = new AWS.DynamoDB.DocumentClient();
-const tableName = process.env.target_table || "Events";
+const tableName = process.env.target_table;
 
 exports.handler = async (event) => {
   const eventId = uuidv4();
@@ -24,7 +24,7 @@ exports.handler = async (event) => {
   try {
     const data = await docClient.put(params).promise();
 
-    const res = {
+    return JSON.stringify({
       statusCode: 201,
       event: {
         id: eventId,
@@ -32,9 +32,7 @@ exports.handler = async (event) => {
         createdAt: createdAt,
         body: event.content,
       },
-    };
-
-    return res;
+    });
   } catch (error) {
     return JSON.stringify({
       statusCode: 500,
